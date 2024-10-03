@@ -23,6 +23,7 @@ void output(Node *);
 void addNodeToTail(Node *&, float);
 void deleteNode(Node *&, float);
 void insertNode(Node *&, float, int);
+void deleteList(Node *&);
 
 int main() 
 {
@@ -224,4 +225,23 @@ void insertNode(Node *& head, float val, int index)
         previous->next = newNode;
         newNode->next = current;
     }
+}
+
+// function header
+// DESCRIPTION:
+// ARGUMENTS:
+// RETURNS: 
+void deleteList(Node *& head)
+{
+    Node *current = head; // will be used to traverse list, starts at beginning of list
+    Node *nextNode = nullptr; 
+
+    while (current) // traverse list, while current does not hit nullptr
+    {
+        nextNode = current->next; // head points to next node after current
+        delete current;
+        current = nextNode; 
+    }
+
+    head = nullptr;
 }
