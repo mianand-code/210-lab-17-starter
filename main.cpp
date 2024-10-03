@@ -13,22 +13,26 @@ const int SIZE = 7;
 // creation of a struct named "Node"
 struct Node 
 {
-    float value; // represents data 
+    float value; // represents data that will be stored in the node
     Node *next; // points to the next node
 };
 
 // function prototypes
 void output(Node *);
+void addNodeToHead(Node *&, int);
 
 int main() 
 {
     srand(time(0)); // needed as the first line in main() to generate random numbers for the linked list
     
     Node *head = nullptr;
-    int count = 0;
+    
+    // declaration and initialization of variables section
+    int count = 0; // to serve as a counter when creating a linked list with random numbers
 
     // create a linked list of size SIZE with random numbers 0-99
-    for (int i = 0; i < SIZE; i++) {
+    for (int i = 0; i < SIZE; i++) 
+    {
         int tmp_val = rand() % 100;
         Node *newVal = new Node;
         
