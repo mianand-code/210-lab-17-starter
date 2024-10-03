@@ -34,6 +34,8 @@ int main()
     int count = 0; // to serve as a counter when creating a linked list with random numbers
     float userTailValue; // will hold the user's choice when they are prompted to enter a value to add to the tail of the list
     float userDeleteValue; // will hold the user's choice when they are prompted to enter a value they wish to delete from the list
+    float userInsertValue; // will hold the user's choice when they are prompted to enter a value they wish to insert anywhere in the list
+    int userIndexValue; // will hold the user's choice when they are prompted to enter an index value (location) to place userInsertValue
 
     // create a linked list of size SIZE with random numbers 0-99
     for (int i = 0; i < SIZE; i++) 
@@ -61,6 +63,19 @@ int main()
     deleteNode(head, userDeleteValue);
     // output() function call, to display the contents of the now updated list
     cout << "Here is the updated linked list after deleting a value from the list (if the value entered was found in the list):" << endl;
+    output(head);
+
+    // prompt user to enter a value they wish to insert anywhere in the list
+    cout << "Please enter a value you would like to insert in the linked list (decimals are allowed, index will be asked next): ";
+    cin >> userInsertValue;
+    // prompt user to enter index value (location) where they would like to insert userInsertValue
+    cout << "Please enter the index value (location) of where you would like to place this value (starts at 0): ";
+    cin >> userIndexValue;
+
+    // insertNode() function call, will place user-entered value at user-entered location or will inform the user that the index was not within range
+    insertNode(head, userInsertValue, userIndexValue);
+    // output() function call, to display the contents of the now updated list
+    cout << "Here is the updated linked list after inserting a value in the list (if the index entered was within valid range):" << endl;
     output(head);
 
     return 0;
@@ -199,7 +214,7 @@ void insertNode(Node *& head, float val, int index)
 
     if (i < index) // if the index is not within the range of the list size
     {
-        cout << "The index you exceeds the valid range of the linked list size. Cannot be inserted." << endl;
+        cout << "The index you entered exceeds the valid range of the linked list size. Cannot be inserted." << endl;
         delete newNode; // delete newNode for good housekeeping
         return; // exit the function
     }
