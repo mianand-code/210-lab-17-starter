@@ -142,7 +142,7 @@ void deleteNode(Node *& head, float val)
 
     if (!head) // if linked list is empty. Important to perform this check as validation to ensure we are not deleting from an empty list
     {
-        cout << "ERROR: The linked list is empty. No deletions can be performed." << endl;
+        cout << "The linked list is empty. No deletions can be performed." << endl;
         return; // exit the function
     }
 
@@ -188,10 +188,25 @@ void insertNode(Node *& head, float val, int index)
     Node *current = head; // will be used to traverse list
     Node *previous = nullptr; // will be used to keep a track of the previous node
 
-    // creation of a for loop to traverse the list until we reach the point where the value should be inserted
-    for (int i = 0; i < index && current; i++)
+    // creation of a while loop to traverse the list until we reach the point where the value should be inserted
+    int i = 0;
+    while (i < index && current)
     {
         previous = current; // keep track of the previous node by updating previous to current
         current = current->next; // current is now updated and points to the next node in the list
+        i++;
+    }
+
+    if (i < index) // if the index is not within the range of the list size
+    {
+        cout << "The index you exceeds the valid range of the linked list size. Cannot be inserted." << endl;
+        delete newNode; // delete newNode for good housekeeping
+        return; // exit the function
+    }
+
+    if (previous) // if we want to insert the value somewhere other than the head
+    {
+        previous->next = newNode;
+        newNode->next = current;
     }
 }
