@@ -1,16 +1,29 @@
+// COMSC-210 | Lab 17 | Mira Anand
+// Module 6, Lesson: Linked Lists, Assignment: Modularize the Linked List Code
+// IDE used: Visual Studio Code for Mac
+
+#include <cstdlib> // needed to generate a random number
+#include <ctime> // needed to generate a random number
 #include <iostream>
 using namespace std;
 
+// declaration and initialization of a const int variable to represent the initial size of the linked list when it is populated with random numbers in main()
 const int SIZE = 7;  
 
-struct Node {
-    float value;
-    Node *next;
+// creation of a struct named "Node"
+struct Node 
+{
+    float value; // represents data 
+    Node *next; // points to the next node
 };
 
+// function prototypes
 void output(Node *);
 
-int main() {
+int main() 
+{
+    srand(time(0)); // needed as the first line in main() to generate random numbers for the linked list
+    
     Node *head = nullptr;
     int count = 0;
 
