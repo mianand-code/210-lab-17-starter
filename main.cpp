@@ -22,6 +22,7 @@ void addNodeToHead(Node *&, float);
 void output(Node *);
 void addNodeToTail(Node *&, float);
 void deleteNode(Node *&, float);
+void insertNode(Node *&, float, int);
 
 int main() 
 {
@@ -58,6 +59,9 @@ int main()
 
     // deleteNode() function call, will delete the user-entered value from the list or will inform the user that the value was not found in the list
     deleteNode(head, userDeleteValue);
+    // output() function call, to display the contents of the now updated list
+    cout << "Here is the updated linked list after deleting a value from the list (if the value entered was found in the list):" << endl;
+    output(head);
 
     return 0;
 }
@@ -162,4 +166,30 @@ void deleteNode(Node *& head, float val)
 
     delete current; // delete the value we searched for and found
     current = nullptr; // set current to nullptr for good housekeeping
+}
+
+// function header
+// DESCRIPTION:
+// ARGUMENTS:
+// RETURNS: 
+void insertNode(Node *& head, float val, int index)
+{
+    Node *newNode = new Node; // create a new node
+    newNode->value = val; // set value of new node
+    newNode->next = nullptr; // set next pointer to nullptr
+
+    if (!head) // if linked list is empty
+    {
+        head = newNode; // make newNode the head
+        return; // exit the function
+    }
+
+    Node *current = head; 
+    Node *previous = nullptr;
+
+    for (int i = 0; i < index && current; i++)
+    {
+        previous = current; // keep track of the previous node
+        current = current->next; // current now points to the next node in the list
+    }
 }
