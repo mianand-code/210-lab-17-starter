@@ -32,6 +32,7 @@ int main()
     // declaration and initialization of variables section
     int count = 0; // to serve as a counter when creating a linked list with random numbers
     float userTailValue; // will hold the user's choice when they are prompted to enter a value to add to the tail of the list
+    float userDeleteValue; // will hold the user's choice when they are prompted to enter a value they wish to delete from the list
 
     // create a linked list of size SIZE with random numbers 0-99
     for (int i = 0; i < SIZE; i++) 
@@ -51,68 +52,12 @@ int main()
     cout << "Here is the updated linked list after adding a value to the tail:" << endl;
     output(head);
 
-    // deleting a node
-    Node * current = head;
-    cout << "Which node to delete? " << endl;
-    output(head);
-    int entry;
-    cout << "Choice --> ";
-    cin >> entry;
+    // prompt user to enter a value they wish to delete from the list
+    cout << "Please enter a value from the linked list that you would like to delete: ";
+    cin >> userDeleteValue;
 
-    // traverse that many times and delete that node
-    current = head;
-    Node *prev = head;
-    for (int i = 0; i < (entry-1); i++)
-        if (i == 0)
-            current = current->next;
-        else {
-            current = current->next;
-            prev = prev->next;
-        }
-    // at this point, delete current and reroute pointers
-    if (current) {  // checks for current to be valid before deleting the node
-        prev->next = current->next;
-        delete current;
-        current = nullptr;
-    }
-    output(head);
-
-    // insert a node
-    current = head;
-    cout << "After which node to insert 10000? " << endl;
-    count = 1;
-    while (current) {
-        cout << "[" << count++ << "] " << current->value << endl;
-        current = current->next;
-    }
-    cout << "Choice --> ";
-    cin >> entry;
-
-    current = head;
-    prev = head;
-    for (int i = 0; i < (entry); i++)
-        if (i == 0)
-            current = current->next;
-        else {
-            current = current->next;
-            prev = prev->next;
-        }
-    //at this point, insert a node between prev and current
-    Node * newnode = new Node;
-    newnode->value = 10000;
-    newnode->next = current;
-    prev->next = newnode;
-    output(head);
-
-    // deleting the linked list
-    current = head;
-    while (current) {
-        head = current->next;
-        delete current;
-        current = head;
-    }
-    head = nullptr;
-    output(head);
+    // deleteNode() function call, will delete the user-entered value from the list or will inform the user that the value was not found in the list
+    deleteNode(head, userDeleteValue);
 
     return 0;
 }
@@ -209,4 +154,12 @@ void deleteNode(Node *& head, float val)
         cout << "The value you entered to be deleted was not found in the linked list." << endl;
         return; // exit the function
     }
+
+    if (!previous) // if the value being searched for is found at the head of the list
+        head = head->next; // head will now point to the next node
+    else // if the value being searched for is NOT found at the head
+        previous->next = current->next; // this is the bypass process to bypass the node we want to delete
+
+    delete current; // delete the value we searched for and found
+    current = nullptr; // set current to nullptr for good housekeeping
 }
