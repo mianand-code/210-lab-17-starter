@@ -13,13 +13,14 @@ const int SIZE = 7;
 // creation of a struct named "Node"
 struct Node 
 {
-    float value; // represents data that will be stored in the node
+    float value; // represents data that will be stored in the node, can be a decimal value
     Node *next; // points to the next node
 };
 
 // function prototypes
-void addNodeToHead(Node *&, int);
+void addNodeToHead(Node *&, float);
 void output(Node *);
+void addNodeToTail(Node *&, float);
 
 int main() 
 {
@@ -108,14 +109,20 @@ int main()
 // DESCRIPTION:
 // ARGUMENTS:
 // RETURNS: 
-void addNodeToHead(Node *& head, int val)
+void addNodeToHead(Node *& head, float val)
 {
     Node *newNode = new Node; // create a new node
     newNode->value = val; // set value of new node
 
     if (!head) // if linked list is empty
     {
-        
+        head = newNode; // make newNode the head
+        newNode->next = nullptr; // next node after newNode should be set to nullptr
+    }
+    else // if linked list is NOT empty
+    {
+        newNode->next = head; // next will now point to list's 1st node 
+        head = newNode; // head points to newNode
     }
 }
 
@@ -137,3 +144,8 @@ void output(Node * hd)
     }
     cout << endl;
 }
+
+// function header
+// DESCRIPTION:
+// ARGUMENTS:
+// RETURNS: 
