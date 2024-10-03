@@ -178,8 +178,9 @@ void insertNode(Node *& head, float val, int index)
     newNode->value = val; // set value of new node
     newNode->next = nullptr; // set next pointer to nullptr
 
-    if (!head) // if linked list is empty
+   if (index == 0) // if we want to insert the value at the head
     {
+        newNode->next = head; // next will point to head
         head = newNode; // make newNode the head
         return; // exit the function
     }
