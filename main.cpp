@@ -30,6 +30,7 @@ int main()
     
     // declaration and initialization of variables section
     int count = 0; // to serve as a counter when creating a linked list with random numbers
+    float userTailValue; // will hold the user's choice when they are prompted to enter a value to add to the tail of the list
 
     // create a linked list of size SIZE with random numbers 0-99
     for (int i = 0; i < SIZE; i++) 
@@ -38,6 +39,10 @@ int main()
         addNodeToHead(head, tmp_val); // addNodeToHead() function call, helps to uniformly add nodes to the linked list
     }
     output(head); // output() function call to display the contents of the linked list immediately after creation
+
+    // prompt user to enter a value they want to add to the tail of the list
+    cout << "Please enter a value you would like to add to the tail of the linked list: ";
+    cin >> userTailValue;
 
     // deleting a node
     Node * current = head;
@@ -149,3 +154,22 @@ void output(Node * hd)
 // DESCRIPTION:
 // ARGUMENTS:
 // RETURNS: 
+void addNodeToTail(Node *& head, float val)
+{
+    Node *newNode = new Node; // create a new node
+    newNode->value = val; // set value of new node
+    newNode->next = nullptr; // set next pointer to nullptr
+
+    if (!head) // if linked list is empty
+        head = newNode; // make newNode the head
+    else // if linked list is NOT empty
+    {
+        Node *current = head; // current points to head
+        while (current->next) // loop to traverse list to the end
+        {
+            current = current->next; // current points to next node in the list
+        }
+
+        current->next = newNode; // last node is now set to newNode
+    }
+}
