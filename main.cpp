@@ -191,8 +191,22 @@ void deleteNode(Node *& head, float val)
     Node *current = head; // to locate node to be deleted
     Node *previous = nullptr; // points to the node before the one to be deleted
 
-    if (!head) // if linked list is empty
+    if (!head) // if linked list is empty. Important to perform this check as validation to ensure we are not deleting from an empty list
     {
-        
+        cout << "ERROR: The linked list is empty. No deletions can be performed." << endl;
+        return; // exit the function
+    }
+
+    // traverse/search the list for the value to delete
+    while (current && current->value != val)
+    {
+        previous = current; // keep track of the previous node
+        current = current->next; // current now points to the next node in the list in order to continue the search
+    }
+
+    if (!current) // if the value being searched for was not found. Important to perform this check to provide the user with feedback on their entered value
+    {
+        cout << "The value you entered to be deleted was not found in the linked list." << endl;
+        return; // exit the function
     }
 }
