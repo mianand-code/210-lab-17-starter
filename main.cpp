@@ -21,6 +21,7 @@ struct Node
 void addNodeToHead(Node *&, float);
 void output(Node *);
 void addNodeToTail(Node *&, float);
+void deleteNode(Node *&, float);
 
 int main() 
 {
@@ -41,8 +42,14 @@ int main()
     output(head); // output() function call to display the contents of the linked list immediately after creation
 
     // prompt user to enter a value they want to add to the tail of the list
-    cout << "Please enter a value you would like to add to the tail of the linked list: ";
+    cout << "Please enter a value you would like to add to the tail of the linked list (decimals are allowed): ";
     cin >> userTailValue;
+
+    // addNodeToTail() function call, will add the user's inputted value to the end of the list
+    addNodeToTail(head, userTailValue);
+    // output() function call, to display the contents of the now updated list
+    cout << "Here is the updated linked list after adding a value to the tail:" << endl;
+    output(head);
 
     // deleting a node
     Node * current = head;
@@ -171,5 +178,21 @@ void addNodeToTail(Node *& head, float val)
         }
 
         current->next = newNode; // last node is now set to newNode
+    }
+}
+
+// function header
+// DESCRIPTION:
+// ARGUMENTS:
+// RETURNS: 
+void deleteNode(Node *& head, float val)
+{
+    // deleting a linked list requires 2 pointers:
+    Node *current = head; // to locate node to be deleted
+    Node *previous = nullptr; // points to the node before the one to be deleted
+
+    if (!head) // if linked list is empty
+    {
+        
     }
 }
