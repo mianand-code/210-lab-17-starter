@@ -18,14 +18,14 @@ struct Node
 };
 
 // function prototypes
-void output(Node *);
 void addNodeToHead(Node *&, int);
+void output(Node *);
 
 int main() 
 {
     srand(time(0)); // needed as the first line in main() to generate random numbers for the linked list
     
-    Node *head = nullptr;
+    Node *head = nullptr; // define a pointer for the head of the list and initialize it to nullptr to indicate an empty list
     
     // declaration and initialization of variables section
     int count = 0; // to serve as a counter when creating a linked list with random numbers
@@ -34,21 +34,9 @@ int main()
     for (int i = 0; i < SIZE; i++) 
     {
         int tmp_val = rand() % 100;
-        Node *newVal = new Node;
-        
-        // adds node at head
-        if (!head) { // if this is the first node, it's the new head
-            head = newVal;
-            newVal->next = nullptr;
-            newVal->value = tmp_val;
-        }
-        else { // its a second or subsequent node; place at the head
-            newVal->next = head;
-            newVal->value = tmp_val;
-            head = newVal;
-        }
+        addNodeToHead(head, tmp_val); // addNodeToHead() function call, helps to uniformly add nodes to the linked list
     }
-    output(head);
+    output(head); // output() function call to display the contents of the linked list immediately after creation
 
     // deleting a node
     Node * current = head;
@@ -116,7 +104,27 @@ int main()
     return 0;
 }
 
-void output(Node * hd) {
+// function header
+// DESCRIPTION:
+// ARGUMENTS:
+// RETURNS: 
+void addNodeToHead(Node *& head, int val)
+{
+    Node *newNode = new Node; // create a new node
+    newNode->value = val; // set value of new node
+
+    if (!head) // if linked list is empty
+    {
+        
+    }
+}
+
+// function header
+// DESCRIPTION:
+// ARGUMENTS:
+// RETURNS: 
+void output(Node * hd) 
+{
     if (!hd) {
         cout << "Empty list.\n";
         return;
