@@ -79,6 +79,12 @@ int main()
     cout << "Here is the updated linked list after inserting a value in the list (if the index entered was within valid range):" << endl;
     output(head);
 
+    // deleteList() function call, will delete the entire linked list
+    deleteList(head);
+    // output() function call, to display the contents of the now updated list
+    cout << "Here is the updated linked list after deleting the entire list:" << endl;
+    output(head);
+
     return 0;
 }
 
@@ -107,15 +113,18 @@ void addNodeToHead(Node *& head, float val)
 // DESCRIPTION:
 // ARGUMENTS:
 // RETURNS: 
-void output(Node * hd) 
+void output(Node * head) 
 {
-    if (!hd) {
+    if (!head) 
+    {
         cout << "Empty list.\n";
         return;
     }
+    
     int count = 1;
-    Node * current = hd;
-    while (current) {
+    Node * current = head;
+    while (current) 
+    {
         cout << "[" << count++ << "] " << current->value << endl;
         current = current->next;
     }
