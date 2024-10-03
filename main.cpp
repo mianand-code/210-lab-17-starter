@@ -184,12 +184,13 @@ void insertNode(Node *& head, float val, int index)
         return; // exit the function
     }
 
-    Node *current = head; 
-    Node *previous = nullptr;
+    Node *current = head; // will be used to traverse list
+    Node *previous = nullptr; // will be used to keep a track of the previous node
 
+    // creation of a for loop to traverse the list until we reach the point where the value should be inserted
     for (int i = 0; i < index && current; i++)
     {
-        previous = current; // keep track of the previous node
-        current = current->next; // current now points to the next node in the list
+        previous = current; // keep track of the previous node by updating previous to current
+        current = current->next; // current is now updated and points to the next node in the list
     }
 }
