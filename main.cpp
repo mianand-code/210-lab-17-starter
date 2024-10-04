@@ -2,9 +2,6 @@
 // Module 6, Lesson: Linked Lists, Assignment: Modularize the Linked List Code
 // IDE used: Visual Studio Code for Mac
 
-// Program trusts that when user is prompted to add values to the linked list, they will choose values that are not already in the list
-// Each value should be different
-
 #include <cstdlib> // needed to generate a random number
 #include <ctime> // needed to generate a random number
 #include <iostream>
@@ -24,7 +21,7 @@ struct Node
 void addNodeToHead(Node *&, float);
 void output(Node *);
 void addNodeToTail(Node *&, float);
-void deleteNode(Node *&, float);
+void deleteNode(Node *&, int);
 void insertNode(Node *&, float, int);
 void deleteList(Node *&);
 
@@ -35,25 +32,23 @@ int main()
     Node *head = nullptr; // define a pointer for the head of the list and initialize it to nullptr to indicate an empty list
     
     // declaration and initialization of variables section
-    int count = 0; // to serve as a counter when creating a linked list with random numbers
     float userTailValue; // will hold the user's choice when they are prompted to enter a value to add to the tail of the list
-    float userDeleteValue; // will hold the user's choice when they are prompted to enter a value they wish to delete from the list
+    int userIndexDeleteValue; // will hold the user's choice when they are prompted to enter the index of the value they wish to delete from the list
     float userInsertValue; // will hold the user's choice when they are prompted to enter a value they wish to insert anywhere in the list
-    int userIndexValue; // will hold the user's choice when they are prompted to enter an index value (location) to place userInsertValue
+    int userIndexInsertValue; // will hold the user's choice when they are prompted to enter an index value (location) to place userInsertValue
 
     // create a linked list of size SIZE with random numbers 0-99
-    // after the linked list is initially created with random values between 0-99, the user will be able to add float (decimal) values and negative values if they like
+    // after the linked list is initially created with random values between 0-99, the user will be able to add float (decimal) values and negative values to the list if they like
     for (int i = 0; i < SIZE; i++) 
     {
         int tmp_val = rand() % 100;
         addNodeToHead(head, tmp_val); // addNodeToHead() function call, helps to uniformly add nodes to the linked list
     }
-    // output() function call to display the contents of the linked list immediately after creation
+    // output() function call, to display the contents of the linked list immediately after creation
     cout << "Here is the linked list that was generated:" << endl;
     output(head);
 
     // prompt user to enter a value they want to add to the tail of the list
-    cout << "Please choose a value that is not in the list yet -" << endl;
     cout << "Please enter a value you would like to add to the tail of the linked list (decimals and negatives are allowed): ";
     cin >> userTailValue;
 
@@ -64,27 +59,26 @@ int main()
     cout << "Here is the updated linked list after adding a value to the tail:" << endl;
     output(head);
 
-    // prompt user to enter a value they wish to delete from the list
-    cout << "Please enter a value from the linked list that you would like to delete: ";
-    cin >> userDeleteValue;
+    // prompt user to enter the index value (location) of the number they wish to delete from the list
+    cout << "Please enter the index value (location) of the number you want to delete from the list (index starts at 1): ";
+    cin >> userIndexDeleteValue;
 
-    // deleteNode() function call, will delete the user-entered value from the list or will inform the user that the value was not found in the list
-    deleteNode(head, userDeleteValue);
+    // deleteNode() function call, will delete a value from the list or will inform the user that deletion could not be performed
+    deleteNode(head, userIndexDeleteValue);
     // output() function call, to display the contents of the now updated list
     cout << endl;
-    cout << "Here is the updated linked list after deleting a value from the list (if the value entered was found in the list):" << endl;
+    cout << "Here is the updated linked list after deleting a value from the list (if the index entered was within valid range):" << endl;
     output(head);
 
     // prompt user to enter a value they wish to insert anywhere in the list
-    cout << "Please choose a value that is not in the list yet -" << endl;
     cout << "Please enter a value you would like to insert in the linked list (decimals and negatives are allowed, index will be asked next): ";
     cin >> userInsertValue;
-    // prompt user to enter index value (location) where they would like to insert userInsertValue
-    cout << "Please enter the index value (location) of where you would like to place this value (starts at 1): ";
-    cin >> userIndexValue;
+    // prompt user to enter index value (location) of where they would like to insert userInsertValue
+    cout << "Please enter the index value (location) of where you would like to place this value (index starts at 1): ";
+    cin >> userIndexInsertValue;
 
-    // insertNode() function call, will place user-entered value at user-entered location or will inform the user that the index was not within range
-    insertNode(head, userInsertValue, userIndexValue);
+    // insertNode() function call, will place user-entered value at user-entered index or will inform the user that the index was not within range
+    insertNode(head, userInsertValue, userIndexInsertValue);
     // output() function call, to display the contents of the now updated list
     cout << endl;
     cout << "Here is the updated linked list after inserting a value in the list (if the index entered was within valid range):" << endl;
@@ -174,53 +168,66 @@ void addNodeToTail(Node *& head, float val)
     }
 }
 
-// deleteNode(Node *& head, float val) function header
-// DESCRIPTION: this function will traverse the list to find a value to delete and will delete that value
+// deleteNode(Node *& head, int index) function header
+// DESCRIPTION: this function will traverse the list to find the position (index) of a value to delete and then delete that value from the list
 // deletion will not be performed if the linked list is empty. Function performs a check for that
-// deletion will also not be performed if the value being searched for was not found. Function also performs a check for that
-// ARGUMENTS: Node *& head, which is a pointer to the head of the list and float val, which represents the value wanting to be deleted
+// deletion will also not be performed if the index is greater than or less than the size of the list. Function performs a check for that
+// traversing the list to locate the index is better than traversing to find the value because it handles situations where the linked list may include duplicate values
+// ARGUMENTS: Node *& head, which is a pointer to the head of the list and int index, which represents the position at which the value should be inserted in the list
 // Passing by reference because the linked list will be modified and this modification will also reflect in main()
-// RETURNS: nothing, void function. Purpose is to just search for the value to be deleted, and if successful, delete that value from the list
-void deleteNode(Node *& head, float val)
+// RETURNS: nothing, void function. Purpose is to just search for the index of the value to be deleted, and if successful, delete that value from the list
+void deleteNode(Node *& head, int index)
 {
-    // deleting a linked list requires 2 pointers:
-    Node *current = head; // to locate node to be deleted
-    Node *previous = nullptr; // points to the node before the one to be deleted
-
     if (!head) // if linked list is empty. Important to perform this check as validation to ensure we are not deleting from an empty list
     {
         cout << "The linked list is empty. No deletions can be performed." << endl;
         return; // exit the function
     }
 
-    // traverse/search the list for the value to delete
-    while (current && current->value != val)
+    // performs a check to make sure the index is not less than 1 (head of the list)
+    if (index < 1)
     {
-        previous = current; // keep track of the previous node
-        current = current->next; // current now points to the next node in the list in order to continue the search
+        cout << "The index you entered is invalid. Index starts at 1. No deletions can be performed." << endl;
+        return; // exit the function
     }
+    
+    // deleting a node from a linked list requires 2 pointers:
+    Node *current = head; // to locate node to be deleted
+    Node *previous = nullptr; // points to the node before the one to be deleted
 
-    if (!current) // if the value being searched for was not found. Important to perform this check to provide the user with feedback on their entered value
+    if (index == 1) // if we want to delete the value at the head
     {
-        cout << "The value you entered to be deleted was not found in the linked list." << endl;
+        head = head->next; // head will shift to the next node
+        delete current; // delete the value at index 1
         return; // exit the function
     }
 
-    if (!previous) // if the value being searched for is found at the head of the list
-        head = head->next; // head will now point to the next node
-    else // if the value being searched for is NOT found at the head
-        previous->next = current->next; // this is the bypass process to bypass the node we want to delete
+    // creation of a while loop to traverse the list until we reach the point where the value should be deleted
+    int i = 1;
+    while (i < index && current)
+    {
+        previous = current; // keep track of the previous node by updating previous to current
+        current = current->next; // current is now updated and points to the next node in the list
+        i++;
+    }
 
-    delete current; // delete the value we searched for and found
+    if (!current) // if we have reached the end of the list (nullptr)
+    {
+        cout << "The index you entered exceeds the valid range of the linked list size. No deletions can be performed." << endl;
+        return; // exit the function
+    }
+
+    previous->next = current->next; // bypass process
+    delete current; // perform deletion
     current = nullptr; // set current to nullptr for good housekeeping
 }
 
 // insertNode(Node *& head, float val, int index) function header
 // DESCRIPTION: this function will create a new node, set the value of the new node, and add this new node to a certain index within the list
 // the value will not be inserted if the index is greater than or less than the size of the list. Function performs a check for that
-// if the user wishes to insert the value at the tail (last index of the list), a new index will be created for that value 
-// for example, if a list has 8 values, inserting at index 8 will create a new index (9), which is valid since we want the value to be inserted at the tail
-// creation of this new index and adding a tail is demonstrating the fact that linked lists can grow and are not a fixed size
+// this function demonstrates the fact that linked lists can grow and are not a fixed size
+// for example, if the user wishes to insert a value at the tail index, a new index will be created for the value currently at the tail
+// - if a list has 8 values, inserting a value at index 8 will create a new index (9) for the value currently at the tail
 // ARGUMENTS: Node *& head, which is a pointer to the head of the list -  float val, which represents the value to be inserted
 // Also, int index, which represents the position at which the value should be inserted in the list
 // Passing by reference because the linked list will be modified and this modification will also reflect in main()
@@ -234,12 +241,12 @@ void insertNode(Node *& head, float val, int index)
     // performs a check to make sure the index (where the value should be inserted) is not less than 1 (head of the list)
     if (index < 1)
     {
-        cout << "The index you inserted is invalid. Index starts at 1. Cannot be inserted." << endl;
+        cout << "The index you entered is invalid. Index starts at 1. Cannot be inserted." << endl;
         delete newNode; // delete newNode for good housekeeping
         return; // exit the function
     }
 
-   if (index == 0) // if we want to insert the value at the head
+   if (index == 1) // if we want to insert the value at the head
     {
         newNode->next = head; // next will point to head
         head = newNode; // make newNode the head
@@ -250,7 +257,7 @@ void insertNode(Node *& head, float val, int index)
     Node *previous = nullptr; // will be used to keep a track of the previous node
 
     // creation of a while loop to traverse the list until we reach the point where the value should be inserted
-    int i = 0;
+    int i = 1;
     while (i < index && current)
     {
         previous = current; // keep track of the previous node by updating previous to current
@@ -258,15 +265,15 @@ void insertNode(Node *& head, float val, int index)
         i++;
     }
 
-    if (i < index) // if the index is not within the range of the list size
+    if (!current) // if the index is not within the range of the list size
     {
         cout << "The index you entered exceeds the valid range of the linked list size. Cannot be inserted." << endl;
-        delete newNode; // delete newNode for good housekeeping
         return; // exit the function
     }
 
-    if (previous) // if we want to insert the value somewhere other than the head
+    if (previous) // if previous is not set to nullptr
     {
+        // update pointers so that new value can be correctly linked into list
         previous->next = newNode;
         newNode->next = current;
     }
@@ -280,14 +287,14 @@ void insertNode(Node *& head, float val, int index)
 void deleteList(Node *& head)
 {
     Node *current = head; // will be used to traverse list, starts at beginning of list
-    Node *nextNode = nullptr; 
+    Node *nextNode = nullptr; // set nextNode to nullptr
 
     while (current) // traverse list, while current does not hit nullptr
     {
-        nextNode = current->next; // head points to next node after current
-        delete current;
-        current = nextNode; 
+        nextNode = current->next; // set nextNode to the node after the one to be deleted
+        delete current; // perform deletion
+        current = nextNode; // set current to the next node
     }
 
-    head = nullptr;
+    head = nullptr; // finally set head to nullptr to indicate an empty list
 }
